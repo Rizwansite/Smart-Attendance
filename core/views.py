@@ -24,7 +24,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 def homepage(request):
-    return render(request,'home.html')
+    return render(request,'index.html')
 def homepage1(request):
     return redirect('login')
 
@@ -170,7 +170,7 @@ def user_login(request):
     else:
         form = UserLoginForm()
 
-    return render(request, 'home.html', {'form': form, 'login_error': login_error})
+    return render(request, 'index.html', {'form': form, 'login_error': login_error})
 
 
 
