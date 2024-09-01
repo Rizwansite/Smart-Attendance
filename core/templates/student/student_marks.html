@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ student.user.first_name }} {{ student.user.last_name }} - Marks</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">{{ student.user.first_name }} {{ student.user.last_name }} - Marks</h1>
+        <table class="table table-bordered mt-2">
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Marks Obtained</th>
+                    <th>Total Marks</th>
+                    <th>Date Uploaded</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mark in marks %}
+                <tr>
+                    <td>{{ mark.course.course_title }}</td>
+                    <td>{{ mark.marks_obtained }}</td>
+                    <td>{{ mark.total_marks }}</td>
+                    <td>{{ mark.date_uploaded }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

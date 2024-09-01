@@ -1,0 +1,62 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin Profile | Create Semester
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="card mt-5">
+            <div class="card-header" style="background-color: #040262; color: #fff;">
+                <h2 class="card-title">Create Semester</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error!</strong> Please correct the following errors:
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        {{ form.Semester_No.label_tag }}
+                        {{ form.Semester_No }}
+                        {% if form.errors.Semester_No %}
+                            <p class="text-danger">{{ form.errors.Semester_No.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.DepartmentName.label_tag }}
+                        {{ form.DepartmentName }}
+                        {% if form.errors.DepartmentName %}
+                            <p class="text-danger">{{ form.errors.DepartmentName.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="background-color: #040262; color: #fff; border-color: #040262;">Submit</button>
+                    <!-- <a href="{% url 'display_semesters' %}" class="btn btn-secondary ml-2" >All Semesters</a> -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

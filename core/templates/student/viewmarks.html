@@ -1,0 +1,81 @@
+{% extends "student/profileStudent.html" %}
+
+{% block title %}
+    {{ student.user.first_name }}'s Marks
+{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+        }
+        h1 {
+            color: #040262;
+            margin-bottom: 20px;
+        }
+        .table {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .table thead th {
+            background-color: #040262;
+            color: #fff;
+            text-align: center;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table tbody tr:hover {
+            background-color: #e6e6e6;
+        }
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+        .btn-primary:hover {
+            background-color: #002c77;
+            border-color: #001d4f;
+        }
+    </style>
+
+    <div class="container mt-5">
+        <h1 class="text-center">{{ student.user.first_name }}'s Marks</h1>
+        
+        <table class="table table-striped mt-4">
+            <thead style="background-color: #040262; color: #fff;">
+                <tr>
+                    <th scope="col">Course Title</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Semester</th>
+                    <th scope="col">Marks Obtained</th>
+                    <th scope="col">Total Marks</th>
+                    <th scope="col">Date Uploaded</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mark in marks %}
+                <tr>
+                    <td>{{ mark.course.course_title }}</td>
+                    <td>{{ mark.course.course_code }}</td>
+                    <td>{{ mark.semester.Semester_No }}</td>
+                    <td>{{ mark.marks_obtained }}</td>
+                    <td>{{ mark.total_marks }}</td>
+                    <td>{{ mark.date_uploaded }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

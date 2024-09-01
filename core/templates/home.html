@@ -1,0 +1,483 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+        * {
+            padding: 0;
+            margin: 0;
+            text-decoration: none;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-image: url("{% static 'images/bg2121.jpg' %}");
+            background-size: cover;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 90px;
+            color: white;
+            font-size: 22px;
+            z-index: 99;
+            opacity: 0;
+            animation: to-bottom 1s ease forwards;
+        }
+        header nav a {
+            margin-left: 75px;
+            font-size: 24px;
+            color: white;
+            transition: .3s;
+        }
+        header nav .active,
+        header nav a:hover {
+            color: #02ddff;
+        }
+        .Home {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            overflow: hidden;
+            padding: 0 90px;
+        }
+        .text-box {
+            width: 50%;
+            z-index: 99;
+        }
+        .text-box h1 {
+            color: #02ddff;
+            font-size: 82px;
+            animation: to-right 1s ease forwards 1.3s;
+        }
+        .text-box h1:nth-child(2) {
+            color: white;
+            font-size: 62px;
+            animation-delay: 1.5s;
+        }
+        .text-box p {
+            margin: 40px 0;
+            font-size: 18px;
+            width: 80%;
+            color: #999999;
+            animation: to-right 1s ease forwards 1.7s;
+        }
+        .btn-box {
+            display: flex;
+            gap: 17px;
+        }
+        .btn {
+            position: relative;
+            color: white;
+            padding: 12px 30px;
+            font-size: 22px;
+            border: 2px solid #02ddff;
+            background: transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .3s;
+            animation: to-right 1s ease forwards 1.9s;
+        }
+        .btn:hover,
+        .btn:nth-child(2) {
+            color: black;
+            background-color: #02ddff;
+            box-shadow: 0 0 15px #02ddff;
+        }
+        .btn:nth-child(2):hover {
+            color: white;
+            background: transparent;
+            box-shadow: none;
+        }
+        .Home img {
+            position: absolute;
+            height: 100%;
+            pointer-events: none;
+            right: 0;
+        }
+        .text-box * {
+            opacity: 0;
+        }
+        .text-box span {
+            opacity: 1;
+        }
+        /* keyframes */
+        @keyframes to-bottom {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes to-right {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes rotate {
+            0% {
+                transform: rotateX(75deg) rotate(0deg);
+            }
+            100% {
+                transform: rotateX(75deg) rotate(360deg);
+            }
+        }
+        .rotating-img {
+            transform: rotateX(75deg);
+            bottom: -30%;
+            animation: rotate 8s linear infinite;
+        }
+        @keyframes face {
+            0%, 100% {
+                transform: translateY(10px);
+            }
+            50% {
+                transform: translateY(-70px);
+            }
+        }
+        .face {
+            transform: translateY(10px);
+            animation: face 8s ease-in-out infinite;
+        }
+        @keyframes Home-background {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 var(--height);
+            }
+        }
+        @keyframes Home-opacity {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        .Home {
+            background-image: url(./light.png);
+            background-size: 100% 100%;
+            background-position: 0 var(--height);
+            animation: Home-background 3s linear infinite, Home-opacity 3.5s ease forwards;
+        }
+        /* Blur and Modal Styles */
+        .blur {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .login-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .login-form h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .input-field {
+            position: relative;
+            border-bottom: 2px solid #ccc;
+            margin: 15px 0;
+        }
+        .input-field label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            color: #333;
+            font-size: 16px;
+            pointer-events: none;
+            transition: 0.15s ease;
+        }
+        .input-field input {
+            width: 100%;
+            height: 40px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        .input-field input:focus ~ label,
+        .input-field input:valid ~ label {
+            font-size: 0.8rem;
+            top: 10px;
+            transform: translateY(-120%);
+        }
+        .forget {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 25px 0 35px 0;
+        }
+        .forget label {
+            display: flex;
+            align-items: center;
+        }
+        .forget label span {
+            margin-left: 8px;
+        }
+        .modal button {
+            background: #333;
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 16px;
+            border: 2px solid transparent;
+            transition: 0.3s ease;
+        }
+        .modal button:hover {
+            color: #333;
+            background: #fff;
+            border-color: #333;
+        }
+        /* Additional Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Open Sans", sans-serif;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 0 10px;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("");
+            background-position: center;
+            background-size: cover;
+        }
+        .wrapper {
+            width: 400px;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+        .wrapper form {
+            display: flex;
+            flex-direction: column;
+        }
+        .wrapper h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .wrapper .input-field {
+            position: relative;
+            border-bottom: 2px solid #ccc;
+            margin: 15px 0;
+        }
+        .wrapper .input-field label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            color: #fff;
+            font-size: 16px;
+            pointer-events: none;
+            transition: 0.15s ease;
+        }
+        .wrapper .input-field input {
+            width: 100%;
+            height: 40px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #fff;
+        }
+        .wrapper .input-field input:focus ~ label,
+        .wrapper .input-field input:valid ~ label {
+            font-size: 0.8rem;
+            top: 10px;
+            transform: translateY(-120%);
+        }
+        .wrapper .forget {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 25px 0 35px 0;
+            color: #fff;
+        }
+        .wrapper .forget label {
+            display: flex;
+            align-items: center;
+        }
+        .wrapper .forget label span {
+            margin-left: 8px;
+        }
+        .wrapper a {
+            color: #efefef;
+            text-decoration: none;
+        }
+        .wrapper a:hover {
+            text-decoration: underline;
+        }
+        .wrapper button {
+            background: #fff;
+            color: #000;
+            font-weight: 600;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 16px;
+            border: 2px solid transparent;
+            transition: 0.3s ease;
+        }
+        .wrapper button:hover {
+            color: #fff;
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .wrapper .register {
+            text-align: center;
+            margin-top: 30px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Smart Attendance</h1>
+        <nav>
+            <a href="#" class="active">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#" id="loginLink">Login</a>
+
+            
+        </nav>
+    </header>
+    <section class="Home" id="homeSection">
+        <div class="text-box">
+            <h1>Smart</h1>
+            <h1>Attendance</h1>
+            <p>Smart Attendance automates attendance tracking using advanced face recognition technology. Simplify record-keeping, ensure accuracy, and access real-time updates effortlessly. </p>
+           
+           
+           
+            <span class="btn-box">
+                <a id="startNowLink"class="btn" >Start Now</a>
+                <button type="button" class="btn">Contact Us</button>
+
+                
+            </span>
+            
+          
+        </div>
+        <img src="{% static 'images/rotating-img copy.png' %}" class="rotating-img" alt="">
+        <img src="{% static 'images/face copy.png' %}" class="face" alt="">
+        <img src="{% static 'images/platform copy.png' %}" alt="" style="margin-top: 70px; margin-right: 20px;">
+    </section>
+    <div class="modal" id="loginModal">
+        <div class="wrapper">
+            <form method="post" novalidate style="width: 100%;"  action="{% url 'login' %}" >
+                {% csrf_token %}
+                <h2>Login</h2>
+              
+                <div class="input-field">
+                    <input type="password" id="cnic" name="cnic" required>
+                    <label for="cnic">Enter your CNIC</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="password" name="password" required>
+                    <label for="password">Enter your password</label>
+                </div>
+                <div class="forget">
+                   
+                </div>
+                <!-- <span>
+                    {% if login_error %}
+                
+                    <strong style="color: red;">Invalid cnic or password </strong>
+                
+        
+                {% endif %}
+                </span> -->
+                <button type="submit">Login</button>
+            </form>
+            <div class="register">
+                <p>Don't have an account? <a href="#">Register</a></p>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector(".Home").style.setProperty("--height", window.innerHeight + "px");
+
+const loginLink = document.getElementById('loginLink');
+const startNowLink = document.getElementById('startNowLink');
+const homeSection = document.getElementById('homeSection');
+const loginModal = document.getElementById('loginModal');
+
+const showModal = (event) => {
+    event.preventDefault();
+    homeSection.classList.add('blur');
+    loginModal.classList.add('active');
+};
+
+loginLink.addEventListener('click', showModal);
+startNowLink.addEventListener('click', showModal);
+
+loginModal.addEventListener('click', (event) => {
+    if (event.target === loginModal) {
+        homeSection.classList.remove('blur');
+        loginModal.classList.remove('active');
+    }
+});
+document.querySelector(".Home").style.setProperty("--height", window.innerHeight + "px");
+    </script>
+</body>
+</html>

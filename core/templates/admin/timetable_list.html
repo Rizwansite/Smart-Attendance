@@ -1,0 +1,128 @@
+{% extends "teacher/teacherprofile.html" %}
+
+{% block title %}
+    Timetables
+{% endblock %}
+
+{% block main %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Timetable List</h2>
+            </div>
+            
+            <div class="card-body">
+                <div class="row">
+                    {% for timetable in timetables %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <img src="{{ timetable.image.url }}" class="card-img-top" alt="{{ timetable.title }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ timetable.title }}</h5>
+                                    {% if user.is_superuser %}
+                                    <a href="{% url 'deletetimetable' timetable.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>No timetables available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3 d-flex justify-content-end">
+            <a href="{% url 'Profile' %}" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+</div>
+<style>
+    /* General Styles */
+body {
+    
+    color: #e0e0e0; /* Light text */
+    font-family: Arial, sans-serif;
+}
+
+/* Card Styles */
+.card {
+    color: #040262;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    background-color: #040262; /* Dark blue header */
+    color: #ffffff; /* White text */
+    border-bottom: 1px solid #2c2c2e;
+}
+
+.card-title {
+    color: #ffffff; /* White text */
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #040262; /* Dark blue */
+    border: none;
+    color: #ffffff; /* White text */
+}
+
+.btn-primary:hover {
+    background-color: #03014f; /* Darker blue on hover */
+}
+
+.btn-danger {
+    background-color: #d9534f; /* Red for delete */
+    border: none;
+    color: #ffffff; /* White text */
+}
+
+.btn-danger:hover {
+    background-color: #c9302c; /* Darker red on hover */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Gray for secondary actions */
+    border: none;
+    color: #ffffff; /* White text */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darker gray on hover */
+}
+
+/* Layout and Spacing */
+.row {
+    margin-bottom: 20px;
+}
+
+.mt-3 {
+    margin-top: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 20px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-end {
+    justify-content: flex-end;
+}
+
+/* Image Styles */
+.card-img-top {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    width: 100%;
+    height: auto;
+}
+
+</style>
+{% endblock %}

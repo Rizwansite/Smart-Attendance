@@ -1,0 +1,134 @@
+{% extends "teacher/teacherprofile.html" %}
+
+{% block title %}
+Attendance Records
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            color: #040262; /* Consistent text color */
+            background-color: #f8f9fa; /* Light background color */
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background-color: #ffffff; /* Card background color */
+        }
+        .card-header {
+            background-color: #040262; /* Dark blue header background */
+            color: #ffffff; /* White text in the header */
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .thead-dark th {
+            background-color: #040262; /* Dark blue header background */
+            color: #ffffff; /* White text in the header */
+        }
+        .btn-primary {
+            background-color: #040262; /* Button color */
+            border-color: #031c3e; /* Button border color */
+        }
+        .btn-primary:hover {
+            background-color: #04218b; /* Darker color on hover */
+            border-color: #021930; /* Border color on hover */
+        }
+        .print-button {
+            display: none; /* Hide the print button when printing */
+        }
+        @media print {
+            .print-button {
+                display: none; /* Hide the print button when printing */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg border-0 rounded mb-4">
+            <div class="card-header text-white">
+                <h1 class="mb-0">Students for Course - {{ course }} - Semester {{ semester }}</h1>
+            </div>
+            <div class="card-body">
+                <h4 class="mb-4">Total Number of Lectures: {{ getCount }}</h4>
+
+                {% if course and semester %}
+                    <a href="{% url 'student_attendance_summary' course=course semester=semester totalLecture=getCount %}" class="btn btn-primary mb-4">View Attendance Summary</a>
+                {% else %}
+                    <p>Course or semester is missing</p>
+                {% endif %}
+
+                <div class="row d-flex justify-content-end mt-5">
+                    <div class="col-md-4 mb-3">
+                        <form method="POST" action="{% url 'searchByDate' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="date">Select Date:</label>
+                                <input type="date" id="date" name="date" class="form-control"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <form method="POST" action="{% url 'searchByMonth' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="month">Select Month and Year:</label>
+                                <input type="month" id="month" name="date" class="form-control"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead style="background-color: #040262; color: #fff;">
+                            <tr>
+                                <th>Student CNIC</th>
+                                <th>Student Name</th>
+                                <th>Attendance Date</th>
+                                <th>Is Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                                <tr>
+                                    <td>{{ record.student.user.cnic }}</td>
+                                    <td>{{ record.student.user.first_name }} {{ record.student.user.last_name }}</td>
+                                    <td>{{ record.attendance_date }}</td>
+                                    <td>{{ record.is_present|yesno:"Yes,No" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary print-button" onclick="printPage()">Print</button> <!-- Print button -->
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function printPage() {
+            window.print(); // JavaScript function to trigger print action
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

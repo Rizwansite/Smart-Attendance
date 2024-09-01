@@ -1,0 +1,121 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin Profile
+    {% else %}
+        User Profile
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    {% if user.is_superuser %}
+        <div class="card shadow-lg border-0 rounded mb-4">
+            <div class="card-header text-white" style="background-color: #040262;">
+                <h2 class="mb-0">Attendance Records</h2>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% else %}
+                    <h3>Department: {{ department_name }}</h3>
+                    <h4>Semester: {{ semester_no }}</h4>
+                    <h5>Course: {{ course_code }}</h5>
+
+                    <div class="col-4">
+                        <form method="POST" action="{% url 'searchByDateforAdmin' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="date">Select Date:</label>
+                                <input type="date" id="date" name="date" class="form-control"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+
+                    {% if data %}
+                        <div class="table-responsive mt-3">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Student Name</th>
+                                        <th scope="col">Student Roll No</th>
+                                        <th scope="col">Attendance Date</th>
+                                        <th scope="col">Is Present</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for record in data %}
+                                        <tr>
+                                            <td>{{ record.student.user.first_name }} {{ record.student.user.last_name }}</td>
+                                            <td>{{ record.student.user.roll_no }}</td>
+                                            <td>{{ record.attendance_date }}</td>
+                                            <td>{{ record.is_present }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p>No attendance records found.</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <!-- Alternative content for non-superuser -->
+    {% endif %}
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        color: #040262; /* Consistent text color */
+        background-color: #f8f9fa; /* Light background color */
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        background-color: #ffffff; /* Card background color */
+    }
+    .card-header {
+        background-color: #040262; /* Dark blue header background */
+        color: #ffffff; /* White text in the header */
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .table thead th {
+        background-color: #040262; /* Dark blue header background */
+        color: #ffffff; /* White text in the header */
+    }
+    .table tbody tr:nth-child(even) {
+        background-color: #f1f1f1; /* Alternate row color */
+    }
+    .table tbody tr:nth-child(odd) {
+        background-color: #ffffff; /* Main row color */
+    }
+    .table tbody td {
+        vertical-align: middle; /* Center-align text in table cells */
+    }
+    .btn-primary {
+        background-color: #040262; /* Button color */
+        border-color: #031c3e; /* Button border color */
+    }
+    .btn-primary:hover {
+        background-color: #04218b; /* Darker color on hover */
+        border-color: #021930; /* Border color on hover */
+    }
+</style>
+{% endblock %}

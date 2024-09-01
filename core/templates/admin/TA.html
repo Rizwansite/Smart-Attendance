@@ -1,0 +1,176 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if not user.is_superuser %}
+        User Profile
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            margin-top: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #040262;
+            color: white;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-footer {
+            background-color: #f8f9fa;
+        }
+
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+
+        .btn-primary:hover {
+            background-color: #030150;
+            border-color: #030150;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .table thead th {
+            background-color: #040262;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-1">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">User Profilee</h5>
+            </div>
+            <div class="card-body">
+                <div class='d-flex justify-content-end mt-3 mb-3'>
+                    <a href="{% url 'timetable_list' %}" class='btn btn-success'>View Timetable</a>
+                </div>
+                {% if user.cnic %}
+                    <p><strong>CNIC:</strong> {{ user.cnic }}</p>
+                {% endif %}
+                {% if user.registration_no %}
+                    <p><strong>Registration No:</strong> {{ user.registration_no }}</p>
+                {% endif %}
+                {% if user.roll_no %}
+                    <p><strong>Roll No:</strong> {{ user.roll_no }}</p>
+                {% endif %}
+                {% if user.first_name %}
+                    <p><strong>Name:</strong> {{ user.first_name }}</p> 
+                {% endif %}
+                {% if user.email %}
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                {% endif %}
+                {% if user.phone_no %}
+                    <p><strong>Phone No:</strong> {{ user.phone_no }}</p>
+                {% endif %}
+                {% if user.gender %}
+                    <p><strong>Gender:</strong> {{ user.get_gender_display }}</p>
+                {% endif %}
+                {% if user.date %}
+                    <p><strong>Date:</strong> {{ user.date }}</p>
+                {% endif %}
+                {% if user.age %}
+                    <p><strong>Age:</strong> {{ user.age }}</p>
+                {% endif %}
+                {% if user.address %}
+                    <p><strong>Address:</strong> {{ user.address }}</p>
+                {% endif %}
+                {% if user.department %}
+                    <p><strong>Department:</strong> {{ user.department }}</p>
+                {% endif %}
+            </div>
+
+            <div class="card-footer">
+                <div class="text-right">
+                    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">Assigned Courses</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Title</th>
+                                <th>Semester</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for assignment in assigned_courses %}
+                            <tr>
+                                <td>{{ assignment.course.course_code }}</td>
+                                <td>{{ assignment.course.course_title }}</td>
+                                <td>{{ assignment.semester.Semester_No }}</td>
+                                <td>
+                                    {% if assignment.teacher %}
+                                        <a href="{% url 'get_studentss' assignment.id %}" class="btn btn-primary btn-sm">Get Students</a>
+                                        <a href="{% url 'view_attendance' assignment.course.course_code assignment.semester.Semester_No %}" class="btn btn-primary btn-sm">View Attendance</a>
+                                        <a href="{% url 'marks' assignment.id %}" class="btn btn-primary btn-sm">Upload Marks</a>
+                                        <a href="{% url 'viewmarks' assignment.id %}" class="btn btn-primary btn-sm">View Marks</a>
+                                    {% else %}
+                                        <span class="text-danger">Teacher not associated</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

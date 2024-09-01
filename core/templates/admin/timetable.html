@@ -1,0 +1,125 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    Admin Add Timetable
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Add Timetable</title>
+    <!-- Bootstrap CSS -->
+     <style>
+        /* Base styling for cards */
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card header styling */
+        .card-header {
+            background-color: #040262; /* Dark blue color */
+            color: white;
+            border-bottom: none;
+            padding: 1rem;
+        }
+
+        /* Card body styling */
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: #040262; /* Dark blue color */
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #030153; /* Slightly darker blue for hover effect */
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Darker shade for hover effect */
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        /* Form styling */
+        .form-control {
+            border-radius: 0.3rem;
+            border: 1px solid #ced4da;
+        }
+
+        /* Container */
+        .container {
+            padding: 0 1rem;
+        }
+
+        /* Button group styling */
+        .btn-group {
+            display: flex;
+            gap: 1rem; /* Space between buttons */
+            justify-content: flex-end; /* Align buttons to the right */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Add Timetable Image</h2>
+                    </div>
+
+                    <div class="card-body">
+                        {% if messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'admin_timetable' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                            <div class='row mt-4'>
+                                <div class='col-md'>
+                                    <div class="btn-group">
+                                        <button type="submit" class='btn btn-secondary'>Save Timetable</button>
+                                        <a href="{% url 'homepage' %}" class='btn btn-secondary'>Back</a>
+                                        <a href="{% url 'timetable_list' %}" class='btn btn-primary'>View Timetable</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

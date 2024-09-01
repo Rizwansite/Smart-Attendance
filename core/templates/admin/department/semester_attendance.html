@@ -1,0 +1,101 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    Attendance Progress for Semester {{ semester.Semester_No }} in {{ department.Department_Name }}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg border-0 rounded">
+                <div class="card-header  text-white" style="color: #040262;">
+                    <h2 class="mb-0">Attendance Progress for Semester {{ semester.Semester_No }} in {{ department.Department_Name }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>CNIC</th>
+                                    <th>Roll Number</th>
+                                    <th>Course</th>
+                                    <th>Attendance Date</th>
+                                    <th>Is Present</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in attendance_records %}
+                                    <tr>
+                                        <td>{{ record.student.user.first_name }} {{ record.student.user.last_name }}</td>
+                                        <td>{{ record.student.user.cnic }}</td>
+                                        <td>{{ record.student.user.roll_no }}</td>
+                                        <td>{{ record.course.course_title }}</td>
+                                        <td>{{ record.attendance_date }}</td>
+                                        <td>{{ record.is_present|yesno:"Yes,No" }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No attendance records found for this semester.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        color: #040262; /* Consistent text color */
+        background-color: #f8f9fa; /* Light background color */
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        background-color: #ffffff; /* Card background color */
+    }
+    .card-header {
+        background-color: #040262; /* Dark blue header background */
+        color: #ffffff; /* White text in the header */
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .table thead th {
+        background-color: #040262; /* Dark blue header background */
+        color: #ffffff; /* White text in the header */
+    }
+    .table tbody tr:nth-child(even) {
+        background-color: #f1f1f1; /* Alternate row color */
+    }
+    .table tbody tr:nth-child(odd) {
+        background-color: #ffffff; /* Main row color */
+    }
+    .table tbody td {
+        vertical-align: middle; /* Center-align text in table cells */
+    }
+    .btn-primary {
+        background-color: #0564ea; /* Button color */
+        border-color: #031c3e; /* Button border color */
+    }
+    .btn-primary:hover {
+        background-color: #04218b; /* Darker color on hover */
+        border-color: #021930; /* Border color on hover */
+    }
+</style>
+
+{% endblock %}

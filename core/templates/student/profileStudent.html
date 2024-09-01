@@ -1,0 +1,460 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+  
+  </title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <!-- Custom CSS -->
+  <style>
+    /* Custom styles */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 200px;
+      background-color: #040262;
+      padding-top: 20px; /* Adjusted to make space for brand */
+      transition: width 0.3s;
+      overflow-y: auto;
+    }
+    
+    /* Stylish Scrollbar for Firefox */
+    .sidebar {
+      scrollbar-width: thin; /* Thin scrollbar */
+      scrollbar-color: #040262 #f1f1f1; /* Scrollbar color and track color */
+    }
+    
+    .sidebar:hover {
+      scrollbar-color: #050289 #f1f1f1; /* Change color on hover */
+    }
+    
+    .sidebar.collapsed {
+      width: 50px;
+    }
+    .sidebar .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .sidebar.collapsed .brand span {
+      display: none;
+    }
+    .sidebar ul.navbar-nav {
+      flex-direction: column;
+      height: calc(100% - 60px); /* Adjust height to accommodate padding-top */
+      display: flex;
+      justify-content: space-between; /* Space out the elements */
+    }
+    .sidebar .nav-item {
+      margin-bottom: 5px;
+      white-space: nowrap; /* Prevent splitting */
+    }
+    .sidebar .nav-link-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Space out the elements */
+      color: #fff;
+      padding: 10px;
+      margin: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.5s ease;
+    }
+    .sidebar .nav-link {
+      color: inherit; /* Inherit color from container */
+      display: flex;
+      align-items: center; /* Align items vertically */
+      text-decoration: none;
+    }
+    .sidebar .nav-link .fas {
+      width: 20px; /* Width of the icon */
+      margin-right: 10px;
+    }
+    .sidebar .nav-link span {
+      flex: 1; /* Fill remaining space */
+      display: inline; /* Ensure text is always visible */
+      min-width: 0; /* Allow text to shrink */
+      overflow: hidden; /* Hide overflowing text */
+      text-overflow: ellipsis; /* Show ellipsis for long text */
+    }
+    .sidebar.collapsed .nav-link .fas {
+      margin-right: 0; /* Remove margin for icons in collapsed state */
+    }
+    .sidebar.collapsed .nav-link span {
+      display: none; /* Hide text when collapsed */
+    }
+    .sidebar.collapsed .nav-link-container .arrow-icon {
+      display: none; /* Hide arrow icons when collapsed */
+    }
+    .sidebar .nav-link-container:hover {
+      background-color: #f6f8fa;
+      color: rgb(2, 68, 135);
+    }
+    .sidebar .nav-item ul {
+      list-style-type: none;
+      padding-left: 20px; /* Indent subelements */
+      display: none; /* Hide subelements by default */
+    }
+    .sidebar .nav-item ul .nav-link {
+      padding-left: 30px; /* Additional indent for subelements */
+      color: #fff; /* White text color for sub-elements */
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Space out the elements */
+      margin: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.5s ease;
+    }
+    .sidebar .nav-item ul .nav-link:hover {
+      background-color: #f6f8fa;
+      color: rgb(2, 68, 135); /* Change color on hover */
+    }
+    .content {
+      margin-left: 200px;
+      padding: 20px;
+      transition: margin-left 0.3s; /* Add transition for smooth movement */
+    }
+    .toggle-btn {
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5em;
+    }
+    .logout {
+      margin-top: auto; /* Push logout button to the bottom */
+      margin-bottom: 10px; /* Add some bottom margin */
+    }
+    .arrow-icon.rotate {
+      transform: rotate(180deg);
+      transition: transform 0.3s;
+    }
+  </style>
+
+</head>
+<body>
+  
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="brand">
+      <span>Smart Attendance</span>
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <ul class="navbar-nav">
+      <div>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link"  href="{% url 'Profile' %}" ><i class="fas fa-home"></i> <span>Home</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'timetable_list' %}"><i class="fas fa-users"></i> <span>View Timetable</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'student_all_marks' %}" ><i class="fas fa-upload"></i> <span>View Marks</span></a>
+           
+          </div>
+          
+        
+        
+        
+      </div>
+      <li class="nav-item logout">
+        <div class="nav-link-container">
+          <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  
+  <!-- Content -->
+  <div class="content" id="content">
+    {% block main %}
+    
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+        }
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-footer {
+            padding: 10px;
+            background-color: #f7f7f7;
+        }
+        .card-body img {
+            border-radius: 50%;
+            max-width: 100px;
+        }
+        .card-body h3 {
+            color: #040262;
+            border-bottom: 2px solid #040262;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .card-body p {
+            margin-bottom: 10px;
+        }
+        .card-body a.user-link {
+            color: #040262;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .card-body a.user-link:hover {
+            text-decoration: underline;
+        }
+        .table {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+        .table thead th {
+            background-color: #040262;
+            color: #fff;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table tbody tr:hover {
+            background-color: #e6e6e6;
+        }
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+        .btn-primary:hover {
+            background-color: #002c77;
+            border-color: #001d4f;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        .card-footer {
+            border-top: 1px solid #ddd;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center">
+                            {% if user.image %}
+                                <img src="{{ user.image.url }}" alt="Profile Image" class="img-fluid rounded-circle">
+                            {% endif %}
+                        </div>
+
+                        <div class="user-details">
+                            <h3>User Profile</h3>
+                            <p><strong>CNIC:</strong> {{ user.cnic }}</p>
+                            <p><strong>Registration No:</strong> {{ user.registration_no }}</p>
+                            <p><strong>Roll No:</strong> {{ user.roll_no }}</p>
+                            <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                            <p><strong>Email:</strong> {{ user.email }}</p>
+                            <p><strong>Phone No:</strong> {{ user.phone_no }}</p>
+                            <p><strong>Gender:</strong> {{ user.get_gender_display }}</p>
+                            <p><strong>Date:</strong> {{ user.date }}</p>
+                            <p><strong>Age:</strong> {{ user.age }}</p>
+                            <p><strong>Address:</strong> {{ user.address }}</p>
+
+                            <hr/>
+
+                            {% if not children %}
+                                <a href="{% url 'timetable_list' %}" class="btn btn-primary">Time Table</a>
+                            {% endif %}
+
+                            {% if children %}
+                                <h3>List of All Children</h3>
+                                <hr/>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Roll No</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p_ll in children %}
+                                        <tr>
+                                            <td>{{ p_ll.user.roll_no }}</td>
+                                            <td>{{ p_ll.user.first_name }} {{ p_ll.user.last_name }}</td>
+                                            <td><a href="{% url 'viewDetailofSpecficStudent' p_ll.user.id %}" class="btn btn-link user-link">View Performance</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+
+                            {% if user.student %}
+                                <h3>Student Details</h3>
+                                <p><strong>Department:</strong> {{ user.student.department }}</p>
+                                <hr/>
+                                
+                                {% if user.student.semester %}
+                                    <h3>Semester Details</h3>
+                                    <p><strong>Semester:</strong> {{ user.student.semester.Semester_No }}</p>
+                                    <table class="table table-bordered table-hover">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Course Code</th>
+                                                <th scope="col">Course Title</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cor in courses %}
+                                            <tr>
+                                                <td>{{ cor.course_code }}</td>
+                                                <td>{{ cor.course_title }}</td>
+                                                <td><a href="{% url 'get_students_attendance' cor.course_code cor.semester.Semester_No request.user.cnic %}"  class="btn btn-primary">View Attendance</a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <a href="{% url 'student_all_marks' %}" class="btn btn-primary">View Marks</a>
+                                {% endif %}
+                                
+                                <hr/>
+                                
+                                {% if user.student.parent %}
+                                    <h3>Parent Details</h3>
+                                    <p><strong>Parent Name:</strong> {{ user.student.parent.user.first_name }}</p>
+                                    <p><strong>Parent CNIC:</strong> {{ user.student.parent.user.cnic }}</p>
+                                    <p><strong>Parent Email:</strong> {{ user.student.parent.user.email }}</p>
+                                    <p><strong>Parent Phone No:</strong> {{ user.student.parent.user.phone_no }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="text-right">
+                            <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('content');
+      const toggleBtn = document.querySelector('.toggle-btn');
+      sidebar.classList.toggle('collapsed');
+      if (sidebar.classList.contains('collapsed')) {
+        content.style.marginLeft = '50px';
+        toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      } else {
+        content.style.marginLeft = '200px';
+        toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      // Function to toggle submenu visibility
+      function toggleSubMenu(event) {
+        const arrowIcon = event.target.closest('.arrow-icon');
+        if (!arrowIcon) return; // Ensure the click is on an arrow icon
+        
+        const submenu = arrowIcon.parentElement.nextElementSibling; // Get the associated submenu
+        const isVisible = submenu.style.display === 'block';
+        
+        // Close all other submenus
+        document.querySelectorAll('.sidebar .nav-item ul').forEach(item => {
+          if (item !== submenu) {
+            item.style.display = 'none';
+            item.previousElementSibling.querySelector('.arrow-icon').classList.remove('rotate');
+          }
+        });
+        
+        // Toggle the clicked submenu
+        if (isVisible) {
+          submenu.style.display = 'none'; // Hide this submenu if it was visible
+          arrowIcon.classList.remove('rotate'); // Remove rotation effect
+        } else {
+          submenu.style.display = 'block'; // Show this submenu if it was hidden
+          arrowIcon.classList.add('rotate'); // Add rotation effect
+        }
+      }
+
+      // Add click event listeners to all arrow icons
+      document.querySelectorAll('.arrow-icon').forEach(icon => {
+        icon.addEventListener('click', toggleSubMenu);
+      });
+
+      // Prevent submenus from closing when clicking inside them
+      document.querySelectorAll('.nav-item ul').forEach(submenu => {
+        submenu.addEventListener('click', function(event) {
+          event.stopPropagation(); // Prevent click event from propagating up to parent elements
+        });
+      });
+
+      // Prevent clicks on nav link containers from closing submenus
+      document.querySelectorAll('.nav-link-container').forEach(container => {
+        container.addEventListener('click', function(event) {
+          event.stopPropagation(); // Prevent click event from propagating up to parent elements
+        });
+      });
+    });
+  </script>
+</body>
+</html>

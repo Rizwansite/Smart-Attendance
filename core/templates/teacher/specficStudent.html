@@ -1,0 +1,115 @@
+{% extends "teacher/teacherprofile.html" %}
+
+{% block title %}
+    All Students
+{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        h2 {
+            color: #040262;
+            border-bottom: 2px solid #040262;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+        .btn-primary:hover {
+            background-color: #06046f;
+            border-color: #030155;
+        }
+        .table {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .table thead th {
+            background-color: #040262;
+            color: #fff;
+            font-weight: bold;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table tbody tr:hover {
+            background-color: #e6e6e6;
+        }
+        .img-fluid {
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <div class="container">
+        <h2>All Students</h2>
+
+        <div>
+            <a href="{% url 'recognize_faces' %}" class="btn btn-primary">Mark Attendance</a>
+            <a href="{% url 'recognize_face' %}" class="btn btn-primary">Take Attendance</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.student_roll_no }}</td>
+                    <td>{{ student.student_name }}</td>
+                    <td>
+                        {% if student.student_image %}
+                            <img src="{{ student.student_image }}" alt="Profile Image" class="img-fluid" style="width: 100px; height: 100px;">
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- JavaScript for handling image upload -->
+    <script>
+        $(document).ready(function () {
+            $("#uploadBtn").click(function () {
+                var fileInput = $("#imageUpload")[0].files[0];
+                var formData = new FormData();
+                formData.append("image", fileInput);
+
+                $.ajax({
+                    url: "{% url 'recognize_faces' %}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log("Matched student IDs:", data.matched_student_ids);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

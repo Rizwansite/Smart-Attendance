@@ -1,0 +1,38 @@
+{% extends "Shared/base.html" %}
+
+{% block title %}
+    All Students
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <h2 class="mb-4">Matched Students</h2>
+
+    {% if students_data %}
+
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Roll No</th>
+                    <th scope="col">First Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for std in students_data %}
+                    <tr>
+                        <td>{{ std.user.roll_no }}</td>
+                        <td>{{ std.user.first_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% else %}
+
+    <h2 class="mb-4">No Matched students found</h2>
+    {% endif %}
+
+</div>
+{% endblock %}

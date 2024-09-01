@@ -1,0 +1,354 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    {% if user.is_superuser %}
+        Admin Profile
+    {% else %}
+        Document
+    {% endif %}
+  </title>
+  {% if user.is_superuser %}
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   
+  <!-- Custom CSS -->
+  <style>
+    /* Custom styles */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 200px;
+      background-color: #040262;
+      padding-top: 20px; /* Adjusted to make space for brand */
+      transition: width 0.3s;
+      overflow-y: auto;
+    }
+    
+    /* Stylish Scrollbar for Firefox */
+    .sidebar {
+      scrollbar-width: thin; /* Thin scrollbar */
+      scrollbar-color: #040262 #f1f1f1; /* Scrollbar color and track color */
+    }
+    
+    .sidebar:hover {
+      scrollbar-color: #050289 #f1f1f1; /* Change color on hover */
+    }
+    
+    .sidebar.collapsed {
+      width: 50px;
+    }
+    .sidebar .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .sidebar.collapsed .brand span {
+      display: none;
+    }
+    .sidebar ul.navbar-nav {
+      flex-direction: column;
+      height: calc(100% - 60px); /* Adjust height to accommodate padding-top */
+      display: flex;
+      justify-content: space-between; /* Space out the elements */
+    }
+    .sidebar .nav-item {
+      margin-bottom: 5px;
+      white-space: nowrap; /* Prevent splitting */
+    }
+    .sidebar .nav-link-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Space out the elements */
+      color: #fff;
+      padding: 10px;
+      margin: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.5s ease;
+    }
+    .sidebar .nav-link {
+      color: inherit; /* Inherit color from container */
+      display: flex;
+      align-items: center; /* Align items vertically */
+      text-decoration: none;
+    }
+    .sidebar .nav-link .fas {
+      width: 20px; /* Width of the icon */
+      margin-right: 10px;
+    }
+    .sidebar .nav-link span {
+      flex: 1; /* Fill remaining space */
+      display: inline; /* Ensure text is always visible */
+      min-width: 0; /* Allow text to shrink */
+      overflow: hidden; /* Hide overflowing text */
+      text-overflow: ellipsis; /* Show ellipsis for long text */
+    }
+    .sidebar.collapsed .nav-link .fas {
+      margin-right: 0; /* Remove margin for icons in collapsed state */
+    }
+    .sidebar.collapsed .nav-link span {
+      display: none; /* Hide text when collapsed */
+    }
+    .sidebar.collapsed .nav-link-container .arrow-icon {
+      display: none; /* Hide arrow icons when collapsed */
+    }
+    .sidebar .nav-link-container:hover {
+      background-color: #f6f8fa;
+      color: rgb(2, 68, 135);
+    }
+    .sidebar .nav-item ul {
+      list-style-type: none;
+      padding-left: 20px; /* Indent subelements */
+      display: none; /* Hide subelements by default */
+    }
+    .sidebar .nav-item ul .nav-link {
+      padding-left: 30px; /* Additional indent for subelements */
+      color: #fff; /* White text color for sub-elements */
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Space out the elements */
+      margin: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.5s ease;
+    }
+    .sidebar .nav-item ul .nav-link:hover {
+      background-color: #f6f8fa;
+      color: rgb(2, 68, 135); /* Change color on hover */
+    }
+    .content {
+      margin-left: 200px;
+      padding: 20px;
+      transition: margin-left 0.3s; /* Add transition for smooth movement */
+    }
+    .toggle-btn {
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5em;
+    }
+    .logout {
+      margin-top: auto; /* Push logout button to the bottom */
+      margin-bottom: 10px; /* Add some bottom margin */
+    }
+    .arrow-icon.rotate {
+      transform: rotate(180deg);
+      transition: transform 0.3s;
+    }
+  </style>
+  {% endif %}
+</head>
+<body>
+  {% if user.is_superuser %}
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="brand">
+      <span>Smart Attendance</span>
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <ul class="navbar-nav">
+      <div>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link"  href="{% url 'Profile' %}" ><i class="fas fa-home"></i> <span>Home</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'department_list' %}"><i class="fas fa-users"></i> <span>Departments</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'display_semesters' %}"><i class="fas fa-receipt"></i> <span>Semesters</span></a>
+            <i class="fas fa-chevron-down arrow-icon"></i>
+          </div>
+          <ul>
+            <li><a class="nav-link" href="{% url 'create_semester'%}"><span>Add Semester</span></a></li>
+           
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'allUsers' %}" ><i class="fas fa-upload"></i> <span>Students</span></a>
+            <i class="fas fa-chevron-down arrow-icon"></i>
+          </div>
+          <ul>
+            <li><a class="nav-link" href="{% url 'register' %}">Add student</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'all_teacher' %}"><i class="fas fa-building"></i> <span>Teachers</span></a>
+            <i class="fas fa-chevron-down arrow-icon"></i>
+          </div>
+          <ul>
+            <li><a class="nav-link" href="{% url 'teacher_registration' %}">Add Teacher</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'create_course' %}"><i class="fas fa-receipt"></i> <span>Add Course</span></a>
+            <i class="fas fa-chevron-down arrow-icon"></i>
+          </div>
+          <ul>
+            <li><a class="nav-link" href="{% url 'assign_course' %}"><span>Assign Course to teacher</span></a></li>
+            <li><a class="nav-link" href="{% url 'assigned_courses' %}">Assigned Courses</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'display_semesters' %}"><i class="fas fa-receipt"></i> <span>Semesters</span></a>
+            <i class="fas fa-chevron-down arrow-icon"></i>
+          </div>
+          <ul>
+            <li><a class="nav-link" href="{% url 'create_semester'%}"><span>Add Semester</span></a></li>
+           
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'department_lists' %}"><i class="fas fa-users"></i> <span>View Attendance</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'admin_reset_password' %}"><i class="fas fa-users"></i> <span>Reset Password</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'admin_timetable' %}"><i class="fas fa-users"></i> <span>Upload Timetable</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link-container">
+            <a class="nav-link" href="{% url 'camera' %}"><i class="fas fa-users"></i> <span>Data Collection</span></a>
+            
+          </div>
+          
+        </li>
+      </div>
+      <li class="nav-item logout">
+        <div class="nav-link-container">
+          <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+        </div>
+      </li>
+      
+    </ul>
+  </div>
+  {% endif %}
+  
+  <!-- Content -->
+  <div class="content" id="content">
+    {% block main %}
+    <div class="col-md-8">
+      <div class="card">
+          <div class="card-header" style="background-color: #040262; color: #fff;">
+              <h2 class="mb-0">Admin Profile</h2>
+          </div>
+          <div class="card-body">
+              <div class="text-center">
+                  {% if user.image %}
+                      <img src="{{ user.image.url }}" alt="Profile Image" class="img-fluid rounded-circle" style="max-width: 200px;">
+                  {% endif %}
+              </div>
+              <p class="mb-1"><strong>Email:</strong> {{ user.email }}</p>
+              
+          </div>
+          
+      </div>
+  </div>
+</div>
+    {% endblock %}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('content');
+      const toggleBtn = document.querySelector('.toggle-btn');
+      sidebar.classList.toggle('collapsed');
+      if (sidebar.classList.contains('collapsed')) {
+        content.style.marginLeft = '50px';
+        toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      } else {
+        content.style.marginLeft = '200px';
+        toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      // Function to toggle submenu visibility
+      function toggleSubMenu(event) {
+        const arrowIcon = event.target.closest('.arrow-icon');
+        if (!arrowIcon) return; // Ensure the click is on an arrow icon
+        
+        const submenu = arrowIcon.parentElement.nextElementSibling; // Get the associated submenu
+        const isVisible = submenu.style.display === 'block';
+        
+        // Close all other submenus
+        document.querySelectorAll('.sidebar .nav-item ul').forEach(item => {
+          if (item !== submenu) {
+            item.style.display = 'none';
+            item.previousElementSibling.querySelector('.arrow-icon').classList.remove('rotate');
+          }
+        });
+        
+        // Toggle the clicked submenu
+        if (isVisible) {
+          submenu.style.display = 'none'; // Hide this submenu if it was visible
+          arrowIcon.classList.remove('rotate'); // Remove rotation effect
+        } else {
+          submenu.style.display = 'block'; // Show this submenu if it was hidden
+          arrowIcon.classList.add('rotate'); // Add rotation effect
+        }
+      }
+
+      // Add click event listeners to all arrow icons
+      document.querySelectorAll('.arrow-icon').forEach(icon => {
+        icon.addEventListener('click', toggleSubMenu);
+      });
+
+      // Prevent submenus from closing when clicking inside them
+      document.querySelectorAll('.nav-item ul').forEach(submenu => {
+        submenu.addEventListener('click', function(event) {
+          event.stopPropagation(); // Prevent click event from propagating up to parent elements
+        });
+      });
+
+      // Prevent clicks on nav link containers from closing submenus
+      document.querySelectorAll('.nav-link-container').forEach(container => {
+        container.addEventListener('click', function(event) {
+          event.stopPropagation(); // Prevent click event from propagating up to parent elements
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{% extends "admin/admin.html" %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assigned Courses</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #040262;
+        }
+
+        .btn-outline-primary {
+            border-color: #040262;
+            color: #040262;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #040262;
+            color: #fff;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn-sm {
+            font-size: 0.875rem;
+        }
+
+        .table th {
+            background-color: #040262;
+            color: #fff;
+        }
+
+        .table td {
+            background-color: #f8f9fa;
+        }
+
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+
+        .btn-primary:hover {
+            background-color: #030150;
+            border-color: #030150;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row mb-4 d-flex justify-content-end">
+            <div class="col-md-3">
+                <a href="{% url 'assign_course' %}" class="btn btn-outline-primary btn-block">Assign Courses to Teachers</a>
+            </div>
+        </div>
+        <h1>Assigned Courses</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Teacher Name</th>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>Semester</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assigned_courses %}
+                    <tr>
+                        <td>{{ assignment.teacher.user.first_name }}</td>
+                        <td>{{ assignment.course.course_code }}</td>
+                        <td>{{ assignment.course.course_title }}</td>
+                        <td>{{ assignment.semester.Semester_No }}</td>
+                        <td>
+                            <a href="{% url 'edit_assignment' assignment.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                            <form action="{% url 'delete_assignment' assignment.pk %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+{% endblock %}

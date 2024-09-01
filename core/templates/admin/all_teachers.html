@@ -1,0 +1,113 @@
+{% extends "admin/admin.html" %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Teachers</title>
+    <!-- Bootstrap CSS -->
+   <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f7f6;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #040262;
+        }
+
+        .table {
+            background-color: #fff;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: #040262;
+            color: #fff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+        .form-inline .form-group {
+            margin-right: 0.75rem;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">All Teachers</h1>
+        
+        <form class="form-inline mb-4" action="{% url 'all_teacher' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group mr-2">
+                <label for="departmentSelect" class="mr-2">Department:</label>
+                <select class="form-control" id="departmentSelect" name="departmentname">
+                    <option value="">All Departments</option>
+                    {% for department in departments %}
+                    <option value="{{ department.Department_Name }}" {% if request.POST.departmentname == department.Department_Name %}selected{% endif %}>{{ department.Department_Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="background-color: #040262; border-color: #040262;">Search</button>
+        </form>
+        
+        <table class="table table-hover">
+            <thead >
+                <tr>
+                    <th>CNIC</th>
+                    <th>First Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.user.cnic }}</td>
+                    <td>{{ teacher.user.first_name }}</td>
+                    <td>{{ teacher.user.email }}</td>
+                    <td>{{ teacher.user.phone_no }}</td>
+                    <td>{{ teacher.department.Department_Name }}</td>
+                    <td>
+                        <a href="{% url 'TA' teacher.user.cnic %}" class="btn btn-info btn-sm">View Profile</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

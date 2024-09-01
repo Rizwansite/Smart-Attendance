@@ -1,0 +1,118 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin Profile
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% if messages %}
+                <div class="alert-container">
+                    <ul class="list-unstyled">
+                        {% for message in messages %}
+                            <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> Please correct the following errors:
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if user.is_superuser %}
+                <div class="card shadow-lg border-0 rounded">
+                    <div class="card-header bg-dark-blue text-white">
+                        <h2 class="card-title mb-0">Create Department</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.Department_Name.label_tag }}
+                                {{ form.Department_Name }}
+                                {% if form.Department_Name.errors %}
+                                    <div class="invalid-feedback">{{ form.Department_Name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.HeadOfDepartment.label_tag }}
+                                {{ form.HeadOfDepartment }}
+                                {% if form.HeadOfDepartment.errors %}
+                                    <div class="invalid-feedback">{{ form.HeadOfDepartment.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a href="{% url 'department_list' %}" class="btn btn-secondary">All Departments</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        color: #040262; /* Text color */
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .alert-container {
+        margin-bottom: 20px;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .card-header {
+        background-color: #040262; /* Updated header background color */
+        color: #ffffff; /* White text in the header */
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .btn-primary {
+        background-color: #040262; /* Primary button color */
+        border-color: #031c3e; /* Border color for the button */
+    }
+    .btn-primary:hover {
+        background-color: #04218b; /* Darker color on hover */
+        border-color: #021930; /* Border color on hover */
+    }
+    .btn-secondary {
+        background-color: #6c757d; /* Secondary button color */
+        border-color: #5a6268; /* Border color for the secondary button */
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268; /* Darker color on hover */
+        border-color: #4e555b; /* Border color on hover */
+    }
+    .invalid-feedback {
+        display: block; /* Ensure feedback is displayed as a block element */
+    }
+</style>
+
+{% endblock %}

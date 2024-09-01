@@ -1,0 +1,86 @@
+{% extends "teacher/teacherprofile.html" %}
+
+{% block title %}
+Student Attendance Summary
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Summary</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            color: #040262; /* Consistent text color */
+            background-color: #f8f9fa; /* Light background color */
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background-color: #ffffff; /* Card background color */
+        }
+        .card-header {
+            background-color: #040262; /* Dark blue header background */
+            color: #ffffff; /* White text in the header */
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .thead-dark th {
+            background-color: #040262; /* Dark blue header background */
+            color: #ffffff; /* White text in the header */
+        }
+        .table-bordered {
+            border-color: #dee2e6; /* Light border color for tables */
+        }
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6; /* Light border color for table cells */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg border-0 rounded mb-4">
+            <div class="card-header text-white">
+                <h1 class="mb-0">Attendance Summary for Course - {{ course }} - Semester {{ semester }}</h1>
+            </div>
+            <div class="card-body">
+                <h2 class="mb-4">Total Lectures: {{ total_lecture }}</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Student CNIC</th>
+                                <th>Student Name</th>
+                                <th>Attendance Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for count in attendance_counts %}
+                                <tr>
+                                    <td>{{ count.student__user__cnic }}</td>
+                                    <td>{{ count.student__user__first_name }} {{ count.student__user__last_name }}</td>
+                                    <td>{{ count.percentage|floatformat:2 }}%</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

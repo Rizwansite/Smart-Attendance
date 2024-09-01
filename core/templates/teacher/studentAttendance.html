@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Image</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Upload an Image</h1>
+
+    <a href="{% url 'camera' %}">Camera</a>
+
+
+    <form id="uploadForm" method="post" enctype="multipart/form-data" method="{% url 'recognize_faces' %}">
+        {% csrf_token %}
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit" class='btn btn-primary'>Upload</button>
+    </form>
+
+    <div id="message"></div>
+
+    <table class="table table-bordered mt-4" id="studentTable">
+        <!-- Table headers (if needed) -->
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <!-- Table body -->
+        <tbody id="studentTableBody"></tbody>
+    </table>
+
+    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#uploadForm').submit(function(event) {
+                event.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: "{% url 'recognize_faces' %}",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#message').text(response.message);
+
+                        // Check if response contains matched_names array
+                        if (response.matched_names && response.matched_names.length > 0) {
+                            var tableBody = $('#studentTableBody');
+
+                            // Clear existing table rows
+                            tableBody.empty();
+
+                            // Loop through the matched_names array and create table rows
+                            $.each(response.matched_names, function(index, student) {
+                                var row = $('<tr>');
+                                row.append('<td>' + student.student_name + '</td>');
+                                row.append('<td>Present</td>');
+                                tableBody.append(row);
+                            });
+                        } else {
+                            // Display a message if no matching students found
+                            $('#studentTableBody').html('<tr><td colspan="2">No matching students found</td></tr>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script> {% endcomment %}
+</body>
+</html>

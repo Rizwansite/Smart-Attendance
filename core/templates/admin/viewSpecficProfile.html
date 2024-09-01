@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Teacher Profile</h1>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>CNIC:</strong> {{ teacher.user.cnic }}</p>
+                <p><strong>Email:</strong> {{ teacher.user.email }}</p>
+                <p><strong>Phone Number:</strong> {{ teacher.user.phone_no }}</p>
+                <p><strong>Department:</strong> {{ teacher.department.Department_Name }}</p>
+                <p><strong>Gender:</strong> {{ teacher.user.get_gender_display }}</p>
+                <p><strong>Address:</strong> {{ teacher.user.address }}</p>
+                <p><strong>Age:</strong> {{ teacher.user.age }}</p>
+                <p><strong>Date Joined:</strong> {{ teacher.user.date }}</p>
+                <p><strong>Last Login:</strong> {{ teacher.user.last_login }}</p>
+                <p><strong>Logout Date:</strong> {{ teacher.user.logout_date }}</p>
+            </div>
+        </div>
+        <h3>Courses in Department</h3>
+        <table class="table table-striped mb-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.course_code }}</td>
+                    <td>{{ course.course_title }}</td>
+                    <td>{{ course.semester.Semester_No }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h3>Assigned Courses</h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assigned_courses %}
+                <tr>
+                    <td>{{ assignment.course.course_code }}</td>
+                    <td>{{ assignment.course.course_title }}</td>
+                    <td>{{ assignment.semester.Semester_No }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

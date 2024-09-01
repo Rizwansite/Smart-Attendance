@@ -1,0 +1,228 @@
+{% extends "Shared/base.html" %}
+
+{% block title %}
+    User Profile
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #040262;
+            color: white;
+            border-bottom: 1px solid #040262;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 0.3rem;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .img-thumbnail {
+            border-radius: 0.3rem;
+        }
+
+        .alert-success {
+            border-radius: 0.3rem;
+        }
+
+        .messages {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .messages li {
+            border-radius: 0.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .link-course {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #040262;
+        }
+
+        .link-course:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">{{ user.first_name }} {{ user.last_name }}'s Profile {{ id }}</h2>
+                    </div>
+
+                    <div class="card-body">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'user_detail' user.id %}" class="needs-validation" novalidate>
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label for="image">Profile Image</label>
+                                <input type="file" class="form-control-file" id="image" name="image">
+                                {% if user.image %}
+                                    <img src="{{ user.image.url }}" alt="Profile Image" class="img-thumbnail mt-2" width="150">
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                {{ user_form.cnic.errors }}
+                                <label for="id_cnic">CNIC</label>
+                                <input type="text" name="cnic" id="id_cnic" value="{{ user.cnic }}" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid CNIC.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.registration_no.errors }}
+                                <label for="id_registration_no">Registration Number</label>
+                                <input type="text" name="registration_no" id="id_registration_no" value="{{ user.registration_no }}" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.roll_no.errors }}
+                                <label for="id_roll_no">Roll Number</label>
+                                <input type="text" name="roll_no" id="id_roll_no" value="{{ user.roll_no }}" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.first_name.errors }}
+                                <label for="id_first_name">First Name</label>
+                                <input type="text" name="first_name" id="id_first_name" value="{{ user.first_name }}" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid first name.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.last_name.errors }}
+                                <label for="id_last_name">Last Name</label>
+                                <input type="text" name="last_name" id="id_last_name" value="{{ user.last_name }}" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid last name.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.email.errors }}
+                                <label for="id_email">Email</label>
+                                <input type="email" name="email" id="id_email" value="{{ user.email }}" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.phone_no.errors }}
+                                <label for="id_phone_no">Phone Number</label>
+                                <input type="text" name="phone_no" id="id_phone_no" value="{{ user.phone_no }}" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid phone number.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.gender.errors }}
+                                <label for="id_gender">Gender</label>
+                                <select name="gender" id="id_gender" class="form-control" required>
+                                    <option value="M" {% if user.gender == 'M' %}selected{% endif %}>Male</option>
+                                    <option value="F" {% if user.gender == 'F' %}selected{% endif %}>Female</option>
+                                    <option value="O" {% if user.gender == 'O' %}selected{% endif %}>Other</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a gender.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.address.errors }}
+                                <label for="id_address">Address</label>
+                                <input type="text" name="address" id="id_address" value="{{ user.address }}" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ user_form.age.errors }}
+                                <label for="id_age">Age</label>
+                                <input type="number" name="age" id="id_age" value="{{ user.age }}" class="form-control">
+                            </div>
+
+                            <div class='row mt-4'>
+                                <div class='col-md d-flex justify-content-end'>
+                                    <button type="submit" class='btn btn-secondary'>Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-body">
+                        <h1>Department: {{ std_id.department.Department_Name }}</h1>
+                        <h1>Semester: {{ std_id.semester.Semester_No }}</h1>
+                        
+                        <h1>Enrolled Courses:</h1>
+                        {% for i in courses_std %}
+                            <a href="{% url 'studentcourseattendance' user.pk i.pk %}" class="link-course">
+                                {{ i.course_code }} --- {{ i.course_title }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

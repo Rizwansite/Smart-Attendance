@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Courses</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #e9ecef; /* Light background for the whole page */
+            color: #212529; /* Dark text color */
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: #ffffff; /* White background for the container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h1 {
+            color: #040262; /* Custom blue color */
+            margin-bottom: 1.5rem;
+        }
+        .form-control {
+           
+            color: #212529; /* Dark text color */
+            border: 1px solid #ced4da; /* Lighter border for input fields */
+        }
+        .form-control:focus {
+            border-color: #007bff; /* Blue border on focus */
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Blue shadow on focus */
+        }
+        .btn-primary {
+            background-color: #040262; /* Custom blue color */
+            border-color: #040262; /* Border color to match */
+        }
+        .btn-primary:hover {
+            background-color: #030150; /* Darker blue on hover */
+            border-color: #030150; /* Darker border on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Select Department and Course</h1>
+        <form method="post" action="{% url 'fetch_data' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="departments">Department:</label>
+                <select id="departments" name="departments" class="form-control">
+                    <option value="">Select a Department</option>
+                    {% for department in departments %}
+                        <option value="{{ department.Department_Name }}">{{ department.Department_Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="id_semester">Semester:</label>
+                <select name="semester" id="id_semester" class="form-control">
+                    <option value="">Select a Semester</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="courses">Courses:</label>
+                <select id="courses" name="courses" class="form-control">
+                    <option value="">Select a Course</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#departments, #id_semester').change(function() {
+                var department_name = $('#departments').val();
+                var semester_no = $('#id_semester').val();
+
+                if (department_name && semester_no) {
+                    $.ajax({
+                        url: '{% url "fetch_courses" %}',
+                        data: {
+                            'department_name': department_name,
+                            'semester_no': semester_no
+                        },
+                        success: function(data) {
+                            $('#courses').empty();
+                            $('#courses').append('<option value="">Select a Course</option>');
+                            $.each(data, function(key, value) {
+                                $('#courses').append('<option value="' + value.course_code + '">' + value.course_title + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

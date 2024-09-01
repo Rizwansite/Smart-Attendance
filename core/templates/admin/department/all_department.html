@@ -1,0 +1,121 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin | Profile All Department
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Profile All Department</title>
+    <!-- Bootstrap CSS -->
+   <!-- Custom CSS -->
+    <style>
+        body {
+            color: #ffffff;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            color: #021930;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        .card-header {
+            background-color: #040262;
+            border-bottom: 1px solid #031b4a;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .btn-dark {
+            background-color: #0564ea;
+            border-color: #031c3e;
+        }
+        .btn-dark:hover {
+            background-color: #04218b;
+            border-color: #021930;
+        }
+        .table thead th {
+            background-color: #040262;
+            color: #ffffff;
+        }
+        .table tbody tr {
+            border-radius: 10px; /* Apply rounded corners to table rows */
+            overflow: hidden;    /* Ensure content doesn't overflow rounded corners */
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #043088;
+            color: #ffffff;
+        }
+        .table tbody tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Changed for better contrast */
+            color: #000000;
+        }
+        .table tbody td a {
+            color: #0564ea;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #0564ea;
+            display: inline-block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .table tbody td a:hover {
+            color: #ffffff;
+            background-color: #0564ea;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    Admin | All Department
+                    <a href="{% url 'create_department' %}" class="btn btn-dark float-right">Create Department</a>
+                </div>
+                <div class="card-body">
+                    <h1 class="text-center">All Departments</h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Department Name</th>
+                                <th scope="col">Head of Department</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for department in departments %}
+                            <tr>
+                                <td>{{ department.Department_Name }}</td>
+                                <td>{{ department.HeadOfDepartment }}</td>
+                                <td><a href="{% url 'specfic_department' department.Department_Name %}" class="btn btn-outline-primary">Detail</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+{% endblock %}

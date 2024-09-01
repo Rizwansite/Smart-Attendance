@@ -1,0 +1,97 @@
+{% extends "teacher/teacherprofile.html" %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            color: #040262;
+            border-bottom: 2px solid #040262;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .table thead th {
+            background-color: #040262;
+            color: #fff;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table tbody tr:hover {
+            background-color: #e6e6e6;
+        }
+        .table input[type="number"] {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+        .btn-primary:hover {
+            background-color: #030155;
+            border-color: #030155;
+        }
+        .message {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+
+    <div class="container">
+        <h2>Upload Marks for {{ assignment.course.course_title }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student</th>
+                        <th>Marks Obtained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.user.roll_no }}</td>
+                            <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                            <td>
+                                <input type="number" name="marks_obtained_{{ student.id }}" required>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td><strong>Total Marks</strong></td>
+                        <td><input type="number" name="total_marks" required></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+    </div>
+{% endblock %}

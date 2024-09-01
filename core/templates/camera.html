@@ -1,0 +1,87 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+{% if user.is_superuser %}
+Admin Profile
+{% endif %}
+{% endblock %}
+
+{% block main %}
+{% if user.is_superuser %}
+<div id="content" class="container mt-4">
+    <h1 class="mb-4">Camera Data Collection</h1>
+    <form id="data-collection-form" method="POST" action="{% url 'camera' %}" class="d-flex align-items-center">
+        {% csrf_token %}
+        <div class="form-group flex-grow-1 mr-2">
+            <label for="student_id" class="font-weight-bold">Enter Student ID:</label>
+            <input type="text" id="student_id" name="student_id" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Start Collection</button>
+    </form>
+    <div class="mt-4">
+        <a href="{% url 'train_lbph' %}" class="btn btn-secondary">Train Model</a>
+    </div>
+</div>
+
+<style>
+    #content {
+        background-color: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+
+    h1 {
+        color: #040262;
+    }
+
+    .btn-primary {
+        background-color: #040262;
+        border-color: #040262;
+        margin-top: 13px;
+    }
+
+    .btn-primary:hover {
+        background-color: #030150;
+        border-color: #030150;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #040262;
+    }
+
+    .d-flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+
+    .mr-2 {
+        margin-right: 0.5rem;
+    }
+
+    .btn {
+        border-radius: 0.25rem;
+    }
+</style>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Contact Us
+{% endblock %}
+
+{% block main %}
+    <style>
+        .contact-us {
+            background-color: #f4f4f9;
+            padding: 50px 0;
+        }
+        .contact-us h1 {
+            color: #040262;
+            margin-bottom: 20px;
+        }
+        .contact-us .form-control,
+        .contact-us .form-control:focus {
+            border-color: #040262;
+            box-shadow: none;
+        }
+        .contact-us .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+        .contact-us .btn-primary:hover {
+            background-color: #002c77;
+            border-color: #001d4f;
+        }
+    </style>
+
+    <div class="container contact-us">
+        <h1 class="text-center">Contact Us</h1>
+        <p class="text-center">We would love to hear from you! Whether you have questions, feedback, or just want to say hello, feel free to reach out to us using the form below.</p>
+
+        <div class="row mt-5">
+            <div class="col-md-8 offset-md-2">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Your Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Your Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea class="form-control" id="message" rows="4" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4 text-center">
+                <h4><i class="fas fa-map-marker-alt"></i> Address</h4>
+                <p>1234 Street Name, City, Country</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <h4><i class="fas fa-phone"></i> Phone</h4>
+                <p>+1 234 567 890</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <h4><i class="fas fa-envelope"></i> Email</h4>
+                <p>info@example.com</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

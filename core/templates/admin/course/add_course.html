@@ -1,0 +1,147 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin Profile | Create Course
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Course</title>
+    <!-- Bootstrap CSS -->
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #040262;
+            color: white;
+            border-bottom: 1px solid #040262;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 0.3rem;
+        }
+
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+
+        .btn-primary:hover {
+            background-color: #030150;
+            border-color: #030150;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .alert-danger {
+            border-radius: 0.3rem;
+        }
+
+        .messages {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .messages li {
+            border-radius: 0.3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-1">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if user.is_superuser %}
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h2 class="card-title">Create Course</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {% if form.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>Error!</strong> Please correct the following errors:
+                                    <ul>
+                                        {% for field, errors in form.errors.items %}
+                                            {% for error in errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                {{ form.course_code.label_tag }}
+                                {{ form.course_code }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.course_title.label_tag }}
+                                {{ form.course_title }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.semester.label_tag }}
+                                {{ form.semester }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.department.label_tag }}
+                                {{ form.department }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{% url 'list_courses' %}" class="btn btn-secondary ml-2">All Courses</a>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

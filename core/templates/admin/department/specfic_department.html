@@ -1,0 +1,95 @@
+{% extends "admin/admin.html" %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        Admin | Profile All Department
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% if user.is_superuser %}
+                <h1 class="mb-4 text-center">Department- {{ department.Department_Name }}</h1>
+                <div class="card shadow-lg border-0 rounded mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title" >Head of Department</h5>
+                        <p class="card-text">{{ department.HeadOfDepartment }}</p>
+                    </div>
+                </div>
+                
+                <h2 class="mt-4 text-center">Semesters</h2>
+                <div class="table-responsive mt-3">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Semester Number</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for semester in department.semesters.all %}
+                                <tr>
+                                    <td>{{ semester.Semester_No }}</td>
+                                    <td>
+                                        <a href="{% url 'semester_attendance' department.Department_Name semester.Semester_No %}" class="btn btn-primary btn-sm">View Attendance</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-center">No semesters found for this department.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        color: #040262; /* Consistent text color */
+        background-color: #f8f9fa; /* Light background color */
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        background-color: #ffffff; /* Card background color */
+    }
+    .card-body {
+        color: #021930; /* Dark text for readability */
+    }
+    .table thead th {
+        background-color: #040262; /* Table header background */
+        color: #ffffff; /* White text for header */
+    }
+    .table tbody tr:nth-child(even) {
+        background-color: #f1f1f1; /* Alternate row color */
+    }
+    .table tbody tr:nth-child(odd) {
+        background-color: #ffffff; /* Main row color */
+    }
+    .btn-primary {
+        background-color: #040262; /* Button color */
+        border-color: #031c3e; /* Button border color */
+    }
+    .btn-primary:hover {
+        background-color: #04218b; /* Darker color on hover */
+        border-color: #021930; /* Border color on hover */
+    }
+</style>
+
+{% endblock %}

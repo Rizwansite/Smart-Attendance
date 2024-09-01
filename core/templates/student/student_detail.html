@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.user.first_name }} {{ student.user.last_name }} - Enrolled Courses</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        h1, h2, h3, h4 {
+            color: #040262;
+        }
+        .btn-primary {
+            background-color: #040262;
+            border-color: #040262;
+        }
+        .btn-primary:hover {
+            background-color: #030150;
+            border-color: #030150;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-inline .form-control {
+            display: inline-block;
+            width: auto;
+        }
+        .table thead th {
+            background-color: #040262;
+            color: #ffffff;
+        }
+        .table {
+            background-color: #ffffff;
+        }
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #ddd;
+        }
+        .back-button {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .mt-5 {
+            margin-top: 3rem;
+        }
+        .mt-4 {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mt-5">Department: {{ student.department.Department_Name }}</h1>
+            <a href="{% url 'homepage' %}" class="btn btn-primary back-button">Back</a>
+        </div>
+        <h1 class="mt-5">{{ student.user.first_name }} {{ student.user.last_name }} - Enrolled Courses</h1>
+
+        <div class="mt-4">
+            <h2>Courses</h2>
+            <form method="POST" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group mb-2">
+                    <label for="courses" class="mr-2">Select a course:</label>
+                    <select id="courses" name="courses" class="form-control mr-2">
+                        {% for course in courses %}
+                        <option value="{{ course.course_code }}" {% if selected_course and selected_course.course_code == course.course_code %}selected{% endif %}>{{ course.course_title }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+            {% if selected_course %}
+            <div class="mt-4">
+                <h3>Selected Course: {{ selected_course.course_title }}</h3>
+                <h4>Attendance Records</h4>
+                <table class="table table-bordered mt-2">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Present</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendance in attendance_records %}
+                        <tr>
+                            <td>{{ attendance.attendance_date }}</td>
+                            <td>{{ attendance.is_present|yesno:"Yes,No" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
